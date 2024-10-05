@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>?</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f0f0f0;
+    }
+
+    #countdown {
+      font-size: 2em;
+      background-color: #333;
+      color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+    }
+  </style>
+
+  <!-- Meta tags pour iOS -->
+  <link rel="apple-touch-icon" href="icon-cadeau.webp">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+</head>
+
+<body>
+  <div id="countdown">Chargement...</div>
+
+  <script>
+    // Date cible : 1er novembre 2024
+    const targetDate = new Date('November 1, 2024 00:00:00').getTime();
+
+    // Demande de permission pour les notifications
+    function requestNotificationPermission() {
+      if ('Notification' in window) {
+        Notification.requestPermission().then(function (permission) {
+          if (permission === "granted") {
+            console.log("Les notifications sont activées.");
+          } else {
+            console.log("Les notifications sont bloquées.");
+          }
+        });
+      }
+    }
+
+    // Fonction pour envoyer une notification
+    function sendNotification(message) {
+      if (Notification.permission === "granted") {
+        new Notification(message);
+      }
+    }
+
+    // Fonction pour mettre à jour le compte à rebours
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+      sendNotification("Hello");
+      // Calcul des secondes restantes
+      const seconds = Math.floor(distance / 1000);
+
+      // Affichage du compte à rebours
+      document.getElementById('countdown').innerHTML = seconds;
+
+      // Si le compte à rebours est terminé
+      if (distance < 0) {
+        clearInterval(interval);
+        document.getElementById('countdown').innerHTML = "Le temps est écoulé !";
+        sendNotification("Le compte à rebours est terminé !");
+      }
+    }
+
+    // Mise à jour du compte à rebours toutes les secondes
+    const interval = setInterval(updateCountdown, 1000);
+
+    // Demander la permission pour les notifications au chargement de la page
+    requestNotificationPermission();
+  </script>
+</body>
+
+</html>
